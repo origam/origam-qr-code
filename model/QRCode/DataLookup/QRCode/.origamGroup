@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:file
+  xmlns:x="http://schemas.origam.com/model-persistence/1.0.0"
+  xmlns:g="http://schemas.origam.com/Origam.Schema.SchemaItemGroup/6.0.0">
+  <g:group
+    x:id="1aa09aaa-5e6d-4b9e-b75e-2a640dcee631"
+    x:isFolder="true"
+    g:name="QRCode"
+    g:rootItemType="DataLookup" />
+</x:file>

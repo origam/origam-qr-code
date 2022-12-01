@@ -50,6 +50,6 @@ public class QRCodeServiceAgent : IExternalServiceAgent
         QRCodeGenerator qrGenerator = new();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(inputText, QRCodeGenerator.ECCLevel.Q);
         BitmapByteQRCode qrCode = new(qrCodeData);
-        return  qrCode.GetGraphic(pixelsPerModule);
+        return qrCode.GetGraphic(pixelsPerModule);
     }
 }

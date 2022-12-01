@@ -3,11 +3,11 @@
   <PropertyGroup>
 	  <TargetFramework>netstandard2.0</TargetFramework>
 	  <LangVersion>10.0</LangVersion>
-	  <AssemblyVersion>1.1.0</AssemblyVersion>
-	  <FileVersion>1.1.0</FileVersion>
+	  <AssemblyVersion>1.0.0</AssemblyVersion>
+	  <FileVersion>1.0.0</FileVersion>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	  <Copyright>Advantage Solutions s. r. o.</Copyright>
-	  <PackageVersion>1.1.0</PackageVersion>
+	  <PackageVersion>1.0.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
