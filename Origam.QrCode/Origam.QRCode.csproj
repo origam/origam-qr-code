@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>netstandard2.0</TargetFramework>
+	  <LangVersion>10.0</LangVersion>
+	  <AssemblyVersion>1.1.0</AssemblyVersion>
+	  <FileVersion>1.1.0</FileVersion>
+	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	  <Copyright>Advantage Solutions s. r. o.</Copyright>
+	  <PackageVersion>1.1.0</PackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Origam.Service.Core" Version="1.1.0" />
+    <PackageReference Include="QRCoder" Version="1.4.3" />
+  </ItemGroup>
+
+</Project>
