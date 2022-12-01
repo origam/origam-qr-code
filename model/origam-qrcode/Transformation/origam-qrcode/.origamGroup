@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:file
+  xmlns:x="http://schemas.origam.com/model-persistence/1.0.0"
+  xmlns:g="http://schemas.origam.com/Origam.Schema.SchemaItemGroup/6.0.0">
+  <g:group
+    x:id="5d7774b4-e807-44a4-a103-2275d9bb9bbc"
+    x:isFolder="true"
+    g:name="origam-qrcode"
+    g:rootItemType="Transformation" />
+</x:file>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:file
+  xmlns:x="http://schemas.origam.com/model-persistence/1.0.0"
+  xmlns:g="http://schemas.origam.com/Origam.Schema.SchemaItemGroup/6.0.0">
+  <g:group
+    x:id="d4d2fd33-e6ac-4a5b-9290-ed06b024739e"
+    x:isFolder="true"
+    g:name="origam-qrcode"
+    g:rootItemType="FormControlSet" />
+</x:file>

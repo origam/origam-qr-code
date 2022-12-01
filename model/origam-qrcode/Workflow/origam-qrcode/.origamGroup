@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:file
+  xmlns:x="http://schemas.origam.com/model-persistence/1.0.0"
+  xmlns:g="http://schemas.origam.com/Origam.Schema.SchemaItemGroup/6.0.0">
+  <g:group
+    x:id="520b8c44-156d-4c41-aaa7-4d81209fcafc"
+    x:isFolder="true"
+    g:name="origam-qrcode"
+    g:rootItemType="Workflow" />
+</x:file>
