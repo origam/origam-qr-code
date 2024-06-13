@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="12.2.2" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="13.3.0" />
     <PackageReference Include="Origam.Service.Core" Version="1.1.0" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
   </ItemGroup>
