@@ -58,7 +58,7 @@ public class QRCodeServiceAgent : IExternalServiceAgent
     {
         QRCodeGenerator qrGenerator = new();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(inputText, QRCodeGenerator.ECCLevel.Q);
-        BitmapByteQRCode qrCode = new(qrCodeData);
+        PngByteQRCode qrCode = new(qrCodeData);
         return qrCode.GetGraphic(pixelsPerModule);
     }
     private static byte[] FixedSizeBytes(byte[] byteArrayImage, int width, int height)
