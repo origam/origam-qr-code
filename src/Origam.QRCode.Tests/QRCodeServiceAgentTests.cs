@@ -1,4 +1,5 @@
-﻿using ImageMagick;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
 using Xunit;
 
 namespace Origam.QRCode.Tests
@@ -71,9 +72,9 @@ namespace Origam.QRCode.Tests
             agent.Run();
 
             var bytes = Assert.IsType<byte[]>(agent.Result);
-            using var image = new MagickImage(bytes);
-            Assert.Equal(width, (int)image.Width);
-            Assert.Equal(height, (int)image.Height);
+            using var image = Image.Load(bytes);
+            Assert.Equal(width, image.Width);
+            Assert.Equal(height, image.Height);
         }
 
         [Fact]
@@ -89,8 +90,8 @@ namespace Origam.QRCode.Tests
             agent.Run();
 
             var bytes = Assert.IsType<byte[]>(agent.Result);
-            using var image = new MagickImage(bytes);
-            Assert.Equal(MagickFormat.Png, image.Format);
+            var format = Image.DetectFormat(bytes);
+            Assert.IsType<PngFormat>(format);
         }
 
         [Fact]
