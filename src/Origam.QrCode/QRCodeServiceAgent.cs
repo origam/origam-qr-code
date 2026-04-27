@@ -1,4 +1,4 @@
-﻿#region license
+#region license
 /*
 Copyright 2005 - 2022 Advantage Solutions, s. r. o.
 
@@ -18,12 +18,13 @@ You should have received a copy of the GNU General Public License
 along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 */
 #endregion
-using ImageMagick;
-using ImageMagick.Formats;
 using Origam.Service.Core;
 using QRCoder;
-using System;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System.Collections;
+using System.IO;
 
 namespace Origam.QRCode;
 
@@ -63,17 +64,9 @@ public class QRCodeServiceAgent : IExternalServiceAgent
     }
     private static byte[] FixedSizeBytes(byte[] byteArrayImage, int width, int height)
     {
-        var bmpReadDefines = new BmpReadDefines
-        {
-            IgnoreFileSize = true
-        };
-
-        // Write to stream
-        var settings = new MagickReadSettings();
-        settings.SetDefines(bmpReadDefines);
-        MagickImage imageInfo = new MagickImage(byteArrayImage, settings);
-        var sourceWidth = imageInfo.Width;
-        var sourceHeight = imageInfo.Height;
+        using var sourceImage = Image.Load<Rgba32>(byteArrayImage);
+        var sourceWidth = sourceImage.Width;
+        var sourceHeight = sourceImage.Height;
         var destX = 0;
         var destY = 0;
         float percent;
@@ -82,21 +75,23 @@ public class QRCodeServiceAgent : IExternalServiceAgent
         if (percentHeight < percentWidth)
         {
             percent = percentHeight;
-            destX = Convert.ToInt16((width - sourceWidth * percent) / 2);
+            destX = (int)((width - sourceWidth * percent) / 2);
         }
         else
         {
             percent = percentWidth;
-            destY = Convert.ToInt16(
-                (height - sourceHeight * percent) / 2);
+            destY = (int)((height - sourceHeight * percent) / 2);
         }
         var destWidth = (int)(sourceWidth * percent);
         var destHeight = (int)(sourceHeight * percent);
-        var backgroundImage = new MagickImage(MagickColors.Black, width, height);
-        backgroundImage.Resize(width, height);
-        var pictureBitmap = new MagickImage(byteArrayImage, settings);
-        pictureBitmap.Resize(destWidth, destHeight);
-        backgroundImage.Composite(pictureBitmap, destX, destY);
-        return backgroundImage.ToByteArray(imageInfo.Format);
+
+        sourceImage.Mutate(x => x.Resize(destWidth, destHeight));
+
+        using var backgroundImage = new Image<Rgba32>(width, height, Color.Black);
+        backgroundImage.Mutate(x => x.DrawImage(sourceImage, new Point(destX, destY), 1f));
+
+        using var ms = new MemoryStream();
+        backgroundImage.SaveAsPng(ms);
+        return ms.ToArray();
     }
 }
