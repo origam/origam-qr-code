@@ -20,11 +20,9 @@ along with ORIGAM. If not, see <http://www.gnu.org/licenses/>.
 #endregion
 using Origam.Service.Core;
 using QRCoder;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using SkiaSharp;
+using System;
 using System.Collections;
-using System.IO;
 
 namespace Origam.QRCode;
 
@@ -64,7 +62,19 @@ public class QRCodeServiceAgent : IExternalServiceAgent
     }
     private static byte[] FixedSizeBytes(byte[] byteArrayImage, int width, int height)
     {
-        using var sourceImage = Image.Load<Rgba32>(byteArrayImage);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
+        using var codec = SKCodec.Create(new SKMemoryStream(byteArrayImage))
+            ?? throw new ArgumentException(message: null, nameof(byteArrayImage));
+        var sourceInfo = codec.Info
+            .WithColorType(SKImageInfo.PlatformColorType)
+            .WithAlphaType(SKAlphaType.Premul);
+        using var sourceBitmap = new SKBitmap(sourceInfo);
+        if (codec.GetPixels(sourceInfo, sourceBitmap.GetPixels()) != SKCodecResult.Success)
+        {
+            throw new ArgumentException(message: null, nameof(byteArrayImage));
+        }
+        using var sourceImage = SKImage.FromBitmap(sourceBitmap);
         var sourceWidth = sourceImage.Width;
         var sourceHeight = sourceImage.Height;
         var destX = 0;
@@ -85,13 +95,15 @@ public class QRCodeServiceAgent : IExternalServiceAgent
         var destWidth = (int)(sourceWidth * percent);
         var destHeight = (int)(sourceHeight * percent);
 
-        sourceImage.Mutate(x => x.Resize(destWidth, destHeight));
+        using var backgroundImage = new SKBitmap(width, height);
+        using var canvas = new SKCanvas(backgroundImage);
+        canvas.Clear(SKColors.Black);
+        canvas.DrawImage(
+            sourceImage,
+            SKRect.Create(destX, destY, destWidth, destHeight),
+            new SKSamplingOptions(SKCubicResampler.CatmullRom));
 
-        using var backgroundImage = new Image<Rgba32>(width, height, Color.Black);
-        backgroundImage.Mutate(x => x.DrawImage(sourceImage, new Point(destX, destY), 1f));
-
-        using var ms = new MemoryStream();
-        backgroundImage.SaveAsPng(ms);
-        return ms.ToArray();
+        using var pngData = backgroundImage.Encode(SKEncodedImageFormat.Png, 100);
+        return pngData.ToArray();
     }
 }

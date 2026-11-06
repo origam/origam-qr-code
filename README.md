@@ -1,17 +1,17 @@
 # origam-qr-code
 **Origam** workflow service agent for generation QR Code.
 
-Supported **Origam** versions: 2025.6+.
+Supported **Origam** versions: 2026.10+.
 
 ## How to use
-Reference `origam-qr-code` package in your **Origam** project, add the compiled dlls to the server instance folder and adjust `Origam.Server.deps.json`.
+Reference `origam-qr-code` package in your **Origam** project, copy `Origam.QRCode.dll` and `QRCoder.dll` from the build output to the server instance folder and adjust `Origam.Server.deps.json`. Do not copy the other build output files (`SkiaSharp.dll`, `Origam.Service.Core.dll`, `runtimes`), the server already ships its own versions.
 ```json
 # add this to targets
   "Origam.QRCode/1.0.0": {
 	"dependencies": {
 	  "Origam.Service.Core": "1.1.0",
 	  "QRCoder": "1.4.3",
-	  "SixLabors.ImageSharp": "3.1.12"
+	  "SkiaSharp": "4.153.1"
 	},
 	"runtime": {
 	  "Origam.QRCode.dll": {}
