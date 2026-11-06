@@ -74,6 +74,7 @@ public class QRCodeServiceAgent : IExternalServiceAgent
         {
             throw new ArgumentException(message: null, nameof(byteArrayImage));
         }
+        sourceBitmap.SetImmutable();
         using var sourceImage = SKImage.FromBitmap(sourceBitmap);
         var sourceWidth = sourceImage.Width;
         var sourceHeight = sourceImage.Height;
@@ -92,8 +93,8 @@ public class QRCodeServiceAgent : IExternalServiceAgent
             percent = percentWidth;
             destY = (int)((height - sourceHeight * percent) / 2);
         }
-        var destWidth = (int)(sourceWidth * percent);
-        var destHeight = (int)(sourceHeight * percent);
+        var destWidth = Math.Max(1, (int)(sourceWidth * percent));
+        var destHeight = Math.Max(1, (int)(sourceHeight * percent));
 
         using var backgroundImage = new SKBitmap(width, height);
         using var canvas = new SKCanvas(backgroundImage);

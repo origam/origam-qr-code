@@ -118,7 +118,22 @@ namespace Origam.QRCode.Tests
             agent.Parameters.Add("Width", 100);
             agent.Parameters.Add("Height", 100);
 
-            Assert.ThrowsAny<Exception>(() => agent.Run());
+            Assert.Throws<ArgumentException>(() => agent.Run());
+        }
+
+        [Theory]
+        [InlineData(0, 100)]
+        [InlineData(100, -1)]
+        void ConvertTest_NonPositiveSizeThrows(int width, int height)
+        {
+            var source = CreateQrBytes();
+
+            var agent = new QRCodeServiceAgent { MethodName = "Convert" };
+            agent.Parameters.Add("Data", source);
+            agent.Parameters.Add("Width", width);
+            agent.Parameters.Add("Height", height);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => agent.Run());
         }
 
         [Fact]
