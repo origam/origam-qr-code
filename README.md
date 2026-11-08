@@ -4,7 +4,7 @@
 Supported **Origam** versions: 2026.10+.
 
 ## How to use
-Reference `origam-qr-code` package in your **Origam** project, copy `Origam.QRCode.dll` and `QRCoder.dll` from the build output to the server instance folder and adjust `Origam.Server.deps.json`. Do not copy the other build output files (`SkiaSharp.dll`, `Origam.Service.Core.dll`, `runtimes`), the server already ships its own versions.
+Reference `origam-qr-code` package in your **Origam** project, add the compiled dlls to the server instance folder and adjust `Origam.Server.deps.json`.
 ```json
 # add this to targets
   "Origam.QRCode/1.0.0": {
