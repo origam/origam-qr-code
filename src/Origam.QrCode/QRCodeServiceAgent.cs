@@ -62,8 +62,6 @@ public class QRCodeServiceAgent : IExternalServiceAgent
     }
     private static byte[] FixedSizeBytes(byte[] byteArrayImage, int width, int height)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
         using var codec = SKCodec.Create(new SKMemoryStream(byteArrayImage))
             ?? throw new ArgumentException(message: null, nameof(byteArrayImage));
         var sourceInfo = codec.Info
