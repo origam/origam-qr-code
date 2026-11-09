@@ -62,12 +62,17 @@ public class QRCodeServiceAgent : IExternalServiceAgent
     }
     private static byte[] FixedSizeBytes(byte[] byteArrayImage, int width, int height)
     {
-        using var codec = SKCodec.Create(new SKMemoryStream(byteArrayImage));
+        using var codec = SKCodec.Create(new SKMemoryStream(byteArrayImage))
+            ?? throw new ArgumentException(Strings.UnsupportedImageFormat);
         var sourceInfo = codec.Info
             .WithColorType(SKImageInfo.PlatformColorType)
             .WithAlphaType(SKAlphaType.Premul);
         using var sourceBitmap = new SKBitmap(sourceInfo);
-        codec.GetPixels(sourceInfo, sourceBitmap.GetPixels());
+        var decodeResult = codec.GetPixels(sourceInfo, sourceBitmap.GetPixels());
+        if (decodeResult != SKCodecResult.Success)
+        {
+            throw new ArgumentException(string.Format(Strings.ImageDecodingFailed, decodeResult));
+        }
         sourceBitmap.SetImmutable();
         using var sourceImage = SKImage.FromBitmap(sourceBitmap);
         var sourceWidth = sourceImage.Width;
