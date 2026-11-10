@@ -1,5 +1,4 @@
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
+using SkiaSharp;
 using Xunit;
 
 namespace Origam.QRCode.Tests
@@ -72,7 +71,7 @@ namespace Origam.QRCode.Tests
             agent.Run();
 
             var bytes = Assert.IsType<byte[]>(agent.Result);
-            using var image = Image.Load(bytes);
+            using var image = SKBitmap.Decode(bytes);
             Assert.Equal(width, image.Width);
             Assert.Equal(height, image.Height);
         }
@@ -90,8 +89,8 @@ namespace Origam.QRCode.Tests
             agent.Run();
 
             var bytes = Assert.IsType<byte[]>(agent.Result);
-            var format = Image.DetectFormat(bytes);
-            Assert.IsType<PngFormat>(format);
+            using var codec = SKCodec.Create(new SKMemoryStream(bytes));
+            Assert.Equal(SKEncodedImageFormat.Png, codec.EncodedFormat);
         }
 
         [Fact]
@@ -119,7 +118,22 @@ namespace Origam.QRCode.Tests
             agent.Parameters.Add("Width", 100);
             agent.Parameters.Add("Height", 100);
 
-            Assert.ThrowsAny<Exception>(() => agent.Run());
+            var exception = Assert.Throws<ArgumentException>(() => agent.Run());
+            Assert.Equal("Image data is not in a supported image format.", exception.Message);
+        }
+
+        [Fact]
+        void ConvertTest_TruncatedDataThrows()
+        {
+            var source = CreateQrBytes();
+
+            var agent = new QRCodeServiceAgent { MethodName = "Convert" };
+            agent.Parameters.Add("Data", source[..(source.Length / 2)]);
+            agent.Parameters.Add("Width", 100);
+            agent.Parameters.Add("Height", 100);
+
+            var exception = Assert.Throws<ArgumentException>(() => agent.Run());
+            Assert.Equal("Image data could not be decoded (IncompleteInput).", exception.Message);
         }
     }
 }
